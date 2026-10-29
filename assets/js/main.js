@@ -32,8 +32,8 @@ const VENDEDORES_ROL = 'Asesora de ventas';
 
   /* ---------- Preloader ---------- */
   safe('preloader', () => {
-    const pre = $('.preloader'); if (!pre) return;
-    const hide = () => pre.classList.add('done');
+    const pre = $('.preloader'); if (!pre) return root.classList.add('ready');
+    const hide = () => { pre.classList.add('done'); root.classList.add('ready'); };
     if (reduce) return hide();
     addEventListener('load', () => setTimeout(hide, 200)); setTimeout(hide, 1600);
   });
@@ -93,46 +93,52 @@ const VENDEDORES_ROL = 'Asesora de ventas';
     maniWords = $$('.w', mani);
   });
 
-  /* ---------- Escenas fijadas (solo con movimiento) ---------- */
-  const hero = $('#inicio'), sports = $('#deportes'), works = $('#taller');
+  /* ---------- Deportes: carrusel con flechas, arrastre y deslizar ---------- */
   const sView = $('#sportsView'), sTrack = $('#sportsTrack'), smNum = $('#smNum'), smBar = $('#smBar');
-  const wImgs = $$('.works-media img'), wSteps = $$('#worksSteps li'), wRoll = $$('#wcRoll b'), wBars = $$('.works-bar i');
-  let sportsMax = 0, sportsPinned = false, worksIdx = -1, smIdx = -1;
-
-  const layout = () => {
-    if (motion && hero) hero.classList.add('pinned');
-    if (motion && works) { works.classList.add('pinned'); works.style.setProperty('--wh', (wSteps.length * (desk.matches ? 75 : 62) + 100) + 'vh'); }
-    sportsPinned = motion && desk.matches && !!sports && !!sTrack;
-    if (sports) {
-      sports.classList.toggle('pinned', sportsPinned);
-      if (sportsPinned) {
-        sTrack.style.transform = '';
-        sportsMax = Math.max(0, sTrack.scrollWidth - innerWidth);
-        sports.style.setProperty('--sh', (innerHeight + sportsMax * 1.1) + 'px');
-      } else { sTrack.style.transform = ''; sports.style.removeProperty('--sh'); }
-    }
-  };
-  safe('layout', layout);
-
-  const setMeter = p => {
-    const n = sTrack ? sTrack.children.length : 6;
+  const spPrev = $('#spPrev'), spNext = $('#spNext');
+  let smIdx = -1;
+  const setMeter = () => {
+    if (!sView || !sTrack) return;
+    const m = sView.scrollWidth - sView.clientWidth, p = m > 0 ? clamp(sView.scrollLeft / m) : 0;
+    const n = sTrack.children.length;
     const i = Math.min(n - 1, Math.round(p * (n - 1)));
     if (smBar) smBar.style.transform = `scaleX(${(1 / n + (1 - 1 / n) * p).toFixed(4)})`;
     if (i !== smIdx && smNum) { smIdx = i; smNum.textContent = String(i + 1).padStart(2, '0'); }
+    if (spPrev) spPrev.disabled = sView.scrollLeft < 4;
+    if (spNext) spNext.disabled = sView.scrollLeft > m - 4;
   };
-  // Celu (o sin pin): el carrusel se desliza con el dedo y el contador sigue el desplazamiento
   safe('carrusel', () => {
-    if (!sView) return;
-    sView.addEventListener('scroll', () => { if (!sportsPinned) { const m = sView.scrollWidth - sView.clientWidth; setMeter(m > 0 ? sView.scrollLeft / m : 0); } }, { passive: true });
-    // PC sin pin (movimiento reducido): arrastrar con el mouse
+    if (!sView || !sTrack) return;
+    sView.addEventListener('scroll', setMeter, { passive: true });
+    addEventListener('resize', setMeter);
+    const step = dir => {
+      const card = sTrack.children[0];
+      const w = card ? card.getBoundingClientRect().width + 14 : sView.clientWidth * .8;
+      sView.scrollBy({ left: dir * w, behavior: reduce ? 'auto' : 'smooth' });
+    };
+    spPrev && spPrev.addEventListener('click', () => step(-1));
+    spNext && spNext.addEventListener('click', () => step(1));
+    // PC: arrastrar con el mouse
     let down = false, sx = 0, sl = 0, moved = false;
-    sView.addEventListener('pointerdown', e => { if (sportsPinned || e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = sView.scrollLeft; });
-    addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; sView.scrollLeft = sl - dx; });
-    addEventListener('pointerup', () => { down = false; });
+    sView.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = sView.scrollLeft; });
+    addEventListener('pointermove', e => {
+      if (!down) return; const dx = e.clientX - sx;
+      if (!moved && Math.abs(dx) > 5) { moved = true; sView.classList.add('drag'); }
+      if (moved) sView.scrollLeft = sl - dx;
+    });
+    addEventListener('pointerup', () => {
+      if (!down) return; down = false;
+      if (moved) {
+        sView.classList.remove('drag');
+        const card = sTrack.children[0], w = card ? card.getBoundingClientRect().width + 14 : 1;
+        sView.scrollTo({ left: Math.round(sView.scrollLeft / w) * w, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
     sView.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    sView.addEventListener('dragstart', e => e.preventDefault());
+    setMeter();
   });
 
-  const heroEls = { frame: $('#heroFrame'), img: $('#heroImg'), shade: $('#heroShade'), a: $('#heroA'), b: $('#heroB'), cue: $('#heroCue'), ring: $('#cueRing'), lines: $$('.hero-title .line') };
   const sprog = $('#sprog'), shopBg = $('#shopBg'), shop = $('#tienda');
 
   const frame = () => {
@@ -140,74 +146,28 @@ const VENDEDORES_ROL = 'Asesora de ventas';
     if (hdr) hdr.classList.toggle('scrolled', y > 30);
     if (sprog) { const m = document.documentElement.scrollHeight - vh; sprog.style.transform = `scaleX(${m > 0 ? (y / m).toFixed(4) : 0})`; }
 
-    // Hero: la foto se abre a pantalla completa, el título se separa y aparece el segundo mensaje
-    if (hero && hero.classList.contains('pinned')) {
-      const r = hero.getBoundingClientRect();
-      if (r.bottom > 0) {
-        const p = clamp(-r.top / Math.max(1, r.height - vh)), e = ease(clamp(p / .62));
-        const s0 = desk.matches ? .56 : .9;
-        const H = heroEls;
-        if (H.frame) H.frame.style.transform = `scale(${(s0 + (1 - s0) * e).toFixed(4)})`;
-        if (H.img) H.img.style.transform = `scale(${(1.14 - .14 * e).toFixed(4)})`;
-        if (H.shade) H.shade.style.opacity = desk.matches ? (.3 + .55 * clamp((p - .2) / .3)).toFixed(3) : '1';
-        const t = ease(clamp((p - .06) / .42));
-        const dx = [-18, 13, -7];
-        H.lines.forEach((l, i) => { l.style.transform = `translate3d(${(dx[i] * t).toFixed(2)}vw,0,0)`; });
-        if (H.a) { H.a.style.opacity = clamp(1 - t * 1.5).toFixed(3); H.a.style.visibility = t > .7 ? 'hidden' : ''; }
-        const b = ease(clamp((p - .22) / .3));
-        if (H.b) { H.b.style.opacity = b.toFixed(3); H.b.style.transform = `translate3d(0,${((1 - b) * 36).toFixed(1)}px,0)`; H.b.classList.toggle('live', b > .5); }
-        if (H.ring) H.ring.style.strokeDashoffset = (1 - p).toFixed(4);
-        if (H.cue) H.cue.style.opacity = clamp(1 - p * 1.4).toFixed(3);
-      }
-    }
-
-    // Manifiesto: las palabras se encienden con el scroll
+    // Manifiesto: las palabras se encienden mientras el texto cruza la pantalla (no agrega scroll)
     if (maniWords.length) {
       const r = mani.getBoundingClientRect();
-      const p = clamp((vh * .82 - r.top) / (r.height + vh * .3));
+      const p = clamp((vh * .9 - r.top) / (r.height + vh * .3));
       const n = Math.round(p * maniWords.length);
       maniWords.forEach((w, i) => w.classList.toggle('on', i < n));
     }
 
-    // Deportes (PC): scroll vertical → recorrido horizontal
-    if (sportsPinned) {
-      const r = sports.getBoundingClientRect();
-      const p = clamp(-r.top / Math.max(1, r.height - vh));
-      sTrack.style.transform = `translate3d(${(-sportsMax * p).toFixed(1)}px,0,0)`;
-      setMeter(p);
-    }
-
-    // Taller: 6 etapas con la sección fijada
-    if (works && works.classList.contains('pinned')) {
-      const r = works.getBoundingClientRect();
-      const p = clamp(-r.top / Math.max(1, r.height - vh)), N = wSteps.length;
-      const i = Math.min(N - 1, Math.floor(p * N * .999));
-      wBars.forEach((b, k) => b.style.setProperty('--f', clamp(p * N - k).toFixed(3)));
-      if (i !== worksIdx) {
-        worksIdx = i;
-        wSteps.forEach((s, k) => { s.classList.toggle('on', k === i); s.classList.toggle('up', k < i); s.setAttribute('aria-hidden', String(k !== i)); });
-        wImgs.forEach((im, k) => im.classList.toggle('on', k === i));
-        wRoll.forEach(b => { b.style.transform = `translateY(${-i * 100}%)`; });
-      }
-    }
-
-    // Tienda: la foto se acerca suave
+    // Tienda: la foto se mueve apenas detrás del texto
     if (shopBg && shop && motion) {
       const r = shop.getBoundingClientRect();
       if (r.top < vh && r.bottom > 0) {
         const p = clamp((vh - r.top) / (vh + r.height));
-        shopBg.style.transform = `scale(${(1.18 - .18 * p).toFixed(4)}) translate3d(0,${((p - .5) * -30).toFixed(1)}px,0)`;
+        shopBg.style.transform = `scale(${(1.12 - .12 * p).toFixed(4)}) translate3d(0,${((p - .5) * -24).toFixed(1)}px,0)`;
       }
     }
   };
   let ticking = false;
   const tick = () => { ticking = false; try { frame(); } catch (err) { console.warn('[cozy] frame:', err); } };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(tick); } }, { passive: true });
-  const relayout = () => { safe('layout', layout); worksIdx = -1; smIdx = -1; tick(); };
-  addEventListener('resize', relayout);
-  addEventListener('load', relayout);
-  desk.addEventListener && desk.addEventListener('change', relayout);
-  if (!sportsPinned) setMeter(0);
+  addEventListener('resize', tick);
+  addEventListener('load', () => { tick(); setMeter(); });
   tick();
 
   /* ---------- Marquesina: sigue la velocidad y dirección del scroll ---------- */

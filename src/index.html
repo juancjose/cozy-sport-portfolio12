@@ -67,43 +67,31 @@
   </div>
 </nav>
 
-<nav class="dots" aria-label="Secciones">
-  <a href="#inicio" data-label="Inicio"><i></i></a>
-  <a href="#nosotros" data-label="Nosotros"><i></i></a>
-  <a href="#deportes" data-label="Deportes"><i></i></a>
-  <a href="#kit" data-label="Tu kit"><i></i></a>
-  <a href="#taller" data-label="Taller"><i></i></a>
-  <a href="#tienda" data-label="Tienda"><i></i></a>
-  <a href="#contacto" data-label="Contacto"><i></i></a>
-</nav>
 
 <main id="main">
 
 <!-- ============ HERO: escena fijada, el scroll abre la foto ============ -->
 <section class="hero" id="inicio" aria-labelledby="hero-title">
-  <div class="hero-pin">
-    <div class="hero-frame" id="heroFrame">
-      <div class="hero-img" id="heroImg"><picture><source type="image/webp" srcset="assets/img/fachada-640.webp 640w, assets/img/fachada-1280.webp 1280w, assets/img/fachada-1728.webp 1728w" sizes="100vw"><img src="assets/img/fachada.jpg" width="1728" height="1152" alt="Fachada de la fábrica de Cozy Sport en Beccar, con el cartel verde de la marca" fetchpriority="high" decoding="async"></picture></div>
-      <div class="hero-shade" id="heroShade"></div>
-    </div>
-    <div class="wrap hero-a" id="heroA">
-      <ul class="hero-tags"><li>Desde 1983</li><li>Industria nacional</li><li>Beccar · Bs. As.</li></ul>
-      <h1 id="hero-title" class="display hero-title">
-        <span class="line"><span id="hl1" style="--i:0">Vestimos</span></span>
-        <span class="line"><span id="hl2" style="--i:1" class="outline">tu pasión</span></span>
-        <span class="line"><span id="hl3" style="--i:2" class="green">a medida.</span></span>
-      </h1>
-    </div>
-    <div class="wrap hero-b" id="heroB">
-      <p class="kicker">Hecho en nuestro taller</p>
-      <p class="hero-b-t display">Del boceto<br>a la <span class="green">meta.</span></p>
+  <div class="hero-bg">
+    <div class="hero-img" id="heroImg"><picture><source type="image/webp" srcset="assets/img/fachada-640.webp 640w, assets/img/fachada-1280.webp 1280w, assets/img/fachada-1728.webp 1728w" sizes="100vw"><img src="assets/img/fachada.jpg" width="1728" height="1152" alt="Fachada de la fábrica de Cozy Sport en Beccar, con el cartel verde de la marca" fetchpriority="high" decoding="async"></picture></div>
+    <div class="hero-shade"></div>
+  </div>
+  <div class="wrap hero-in">
+    <ul class="hero-tags"><li>Desde 1983</li><li>Industria nacional</li><li>Beccar · Bs. As.</li></ul>
+    <h1 id="hero-title" class="display hero-title">
+      <span class="line"><span style="--i:0">Vestimos</span></span>
+      <span class="line"><span style="--i:1" class="outline">tu pasión</span></span>
+      <span class="line"><span style="--i:2" class="green">a medida.</span></span>
+    </h1>
+    <div class="hero-foot">
+      <p class="hero-lead">Del boceto a la meta, hecho en nuestro taller.</p>
       <div class="ctas">
         <a class="btn" href="#deportes" data-magnetic>Elegí tu deporte <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn ghost" href="https://tiendacozy.com/" target="_blank" rel="noopener" data-magnetic>Ir a la tienda <svg aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
       </div>
     </div>
-    <a class="hero-cue" href="#nosotros" id="heroCue"><span>Deslizá</span><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle class="ring" id="cueRing" cx="20" cy="20" r="18" pathLength="1"/></svg></a>
   </div>
+  <a class="hero-cue" href="#nosotros" aria-label="Bajar a Nosotros"><span>Bajá</span><i aria-hidden="true"></i></a>
 </section>
 
 <!-- ============ NOSOTROS: texto que se enciende + contadores ============ -->
@@ -121,7 +109,7 @@
   </div>
 </section>
 
-<!-- ============ DEPORTES: carrusel horizontal (scroll en PC, deslizar en celu) ============ -->
+<!-- ============ DEPORTES: carrusel (flechas, arrastre o deslizar) ============ -->
 <section class="sports" id="deportes" aria-labelledby="dep-title">
   <div class="sports-pin" id="sportsPin">
     <div class="wrap sports-head">
@@ -129,11 +117,11 @@
         <p class="kicker rv">Disciplinas</p>
         <h2 id="dep-title" class="display h2 rv" style="--d:1">Un kit para <span class="green">cada deporte.</span></h2>
       </div>
-      <div class="sports-meter rv" style="--d:2" aria-hidden="true">
+      <div class="sports-ctl"><div class="sports-meter rv" style="--d:2" aria-hidden="true">
         <span class="sm-num"><b id="smNum">01</b> / 06</span>
         <span class="sm-bar"><i id="smBar"></i></span>
-        <span class="sm-hint">Deslizá <svg><use href="#i-arrow"/></svg></span>
-      </div>
+        </div>
+      <div class="sm-nav rv" style="--d:2"><button type="button" class="sm-arrow" id="spPrev" aria-label="Deporte anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button><button type="button" class="sm-arrow" id="spNext" aria-label="Deporte siguiente"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button></div></div>
     </div>
     <div class="sports-view" id="sportsView">
       <ul class="sports-track" id="sportsTrack">
@@ -182,32 +170,25 @@
   </div>
 </section>
 
-<!-- ============ TALLER: 6 etapas fijadas al scroll ============ -->
-<section class="works" id="taller" aria-labelledby="taller-title">
-  <div class="works-pin" id="worksPin">
-    <div class="works-media" aria-hidden="true">
-      <!--img:diseno-digital|Sastre trabajando la moldería sobre la mesa|(min-width:1000px) 50vw, 100vw-->
-      <!--img:estampado|Operario trabajando una tela estampada|(min-width:1000px) 50vw, 100vw-->
-      <!--img:corte|Medición y corte de tela sobre la mesa|(min-width:1000px) 50vw, 100vw-->
-      <!--img:costura|Costura de tela en máquina industrial|(min-width:1000px) 50vw, 100vw-->
-      <!--img:control|Revisión a mano de una prenda|(min-width:1000px) 50vw, 100vw-->
-      <!--img:embalaje|Prendas guardadas en una caja de cartón|(min-width:1000px) 50vw, 100vw-->
+<!-- ============ TALLER: 6 etapas ============ -->
+<section class="sec works" id="taller" aria-labelledby="taller-title">
+  <div class="wrap">
+    <div class="works-head">
+      <div>
+        <p class="kicker rv">Taller propio · Beccar</p>
+        <h2 id="taller-title" class="display h2 rv" style="--d:1">Hecho <span class="green">acá.</span></h2>
+      </div>
+      <p class="works-lead rv" style="--d:2">Seis pasos, del diseño al despacho.</p>
     </div>
-    <div class="works-copy">
-      <p class="kicker">Taller propio · Beccar</p>
-      <h2 id="taller-title" class="display works-h">Hecho acá.</h2>
-      <div class="works-count" aria-hidden="true"><span class="wc-roll" id="wcRoll"><b>01</b><b>02</b><b>03</b><b>04</b><b>05</b><b>06</b></span><small>/ 06</small></div>
-      <ol class="works-steps" id="worksSteps">
-        <li class="on"><h3>Diseño</h3><p>Tu boceto pasa a archivo digital, talle por talle.</p></li>
-        <li><h3>Sublimación</h3><p>Con calor y presión, la tinta pasa a ser parte de la tela.</p></li>
-        <li><h3>Corte</h3><p>Cada pieza se corta con el diseño alineado.</p></li>
-        <li><h3>Confección</h3><p>Se arma en máquinas industriales, en nuestro taller.</p></li>
-        <li><h3>Control</h3><p>Color, costuras y talles, prenda por prenda.</p></li>
-        <li><h3>Despegue</h3><p>Lo armamos, lo embalamos y a competir.</p></li>
-      </ol>
-      <div class="works-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <p class="works-note">Imágenes ilustrativas.</p>
-    </div>
+    <ol class="steps">
+      <li class="step rv" style="--d:0"><figure class="step-img"><!--img:diseno-digital|Sastre trabajando la moldería sobre la mesa|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">01</span><h3>Diseño</h3><p>Tu boceto pasa a archivo digital, talle por talle.</p></div></li>
+      <li class="step rv" style="--d:1"><figure class="step-img"><!--img:estampado|Operario trabajando una tela estampada|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">02</span><h3>Sublimación</h3><p>Con calor y presión, la tinta pasa a ser parte de la tela.</p></div></li>
+      <li class="step rv" style="--d:2"><figure class="step-img"><!--img:corte|Medición y corte de tela sobre la mesa|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">03</span><h3>Corte</h3><p>Cada pieza se corta con el diseño alineado.</p></div></li>
+      <li class="step rv" style="--d:0"><figure class="step-img"><!--img:costura|Costura de tela en máquina industrial|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">04</span><h3>Confección</h3><p>Se arma en máquinas industriales, en nuestro taller.</p></div></li>
+      <li class="step rv" style="--d:1"><figure class="step-img"><!--img:control|Revisión a mano de una prenda|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">05</span><h3>Control</h3><p>Color, costuras y talles, prenda por prenda.</p></div></li>
+      <li class="step rv" style="--d:2"><figure class="step-img"><!--img:embalaje|Prendas guardadas en una caja de cartón|(min-width:1000px) 30vw, (min-width:600px) 45vw, 34vw--></figure><div class="step-tx"><span class="step-n">06</span><h3>Despegue</h3><p>Lo armamos, lo embalamos y a competir.</p></div></li>
+    </ol>
+    <p class="works-note">Imágenes ilustrativas.</p>
   </div>
 </section>
 

@@ -1,6 +1,6 @@
 # Cozy Sport · Portfolio 12
 
-Versión interactiva del sitio de Cozy Sport: animaciones al scrollear, carrusel de deportes y un selector de kit que lleva directo a la tienda.
+Versión interactiva del sitio de Cozy Sport: animaciones sutiles al entrar cada sección, carrusel de deportes y un selector de kit que lleva directo a la tienda.
 
 **Sitio en vivo:** https://juancjose.github.io/cozy-sport-portfolio12/
 
@@ -8,11 +8,11 @@ Tienda online: https://tiendacozy.com/
 
 ## Qué tiene
 
-- Hero que se abre a pantalla completa al scrollear y cambia de mensaje.
+- Hero a pantalla completa con animación de entrada al cargar. El scroll es natural, sin secciones fijadas.
 - Manifiesto que se enciende palabra por palabra y contadores animados.
-- Deportes en recorrido horizontal (PC) o swipe (celular).
+- Carrusel de deportes con flechas, arrastre (PC) o deslizar (celular).
 - "Tu kit": elegís tu deporte y ves prendas y el link a esa categoría de la tienda.
-- Taller paso a paso, del diseño al despacho.
+- Taller en 6 pasos, del diseño al despacho, que aparecen al bajar.
 - WhatsApp con selector de vendedoras.
 - Respeta `prefers-reduced-motion`: sin movimiento, todo el contenido visible.
 

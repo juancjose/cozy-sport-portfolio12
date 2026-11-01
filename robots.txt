@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://juancjose.github.io/cozy-sport-portfolio12/sitemap.xml

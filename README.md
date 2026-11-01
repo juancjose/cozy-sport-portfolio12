@@ -1,4 +1,15 @@
-# Cozy Sport · Portfolio 12
+<!-- jnce-header -->
+# Cozy Sport · Portfolio
+
+> Cozy Sport · Portfolio — v12 (interactivo)
+
+**🌐 Sitio online:** [juancjose.github.io/cozy-sport-portfolio12](https://juancjose.github.io/cozy-sport-portfolio12/)  
+**🛠️ Tecnologías:** HTML · CSS · JavaScript  
+**👤 Diseño y desarrollo:** [Juan José Cáceres](https://juancjose.github.io/jnce-studio/)
+
+![Vista previa de Cozy Sport · Portfolio](docs/preview.jpg)
+
+---
 
 Versión interactiva del sitio de Cozy Sport: animaciones sutiles al entrar cada sección, carrusel de deportes y un selector de kit que lleva directo a la tienda.
 
